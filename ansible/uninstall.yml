@@ -1,0 +1,11 @@
+---
+- name: Uninstall Demo
+  hosts: localhost
+
+  vars_files:
+    - vars/vars.yml
+
+  roles:
+  - { role: delete-project, project: 'product-catalog-cicd' }
+  - { role: delete-project, project: 'product-catalog-dev' }
+  - { role: delete-project, project: 'product-catalog-test' }

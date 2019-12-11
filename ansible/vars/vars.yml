@@ -1,0 +1,24 @@
+#########################################################
+# Parameters you do need to change
+#########################################################
+# OCP wildcard subdomain
+#ocp_subdomain: apps.cluster.ocplab.com
+ocp_subdomain: apps-crc.testing
+
+#########################################################
+# Optional parameters
+#########################################################
+# Set the type of CI/CD to use, can be jenkins or tekton
+cicd_type: jenkins
+
+#########################################################
+# Parameters you do not need to change
+#########################################################
+
+# Paramaters to use for postgres Database
+database_name: productdb
+database_user: productdb
+database_password: Demo1234
+database_url: jdbc:mariadb://productdb:3306/productdb
+
+application: product-catalog

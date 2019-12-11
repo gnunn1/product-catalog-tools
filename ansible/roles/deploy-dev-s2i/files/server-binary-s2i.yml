@@ -1,0 +1,59 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: ubi-quarkus-native-binary-s2i
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/quarkus/ubi-quarkus-native-binary-s2i:19.2.1
+    importPolicy: {}
+    name: 19.2.1
+    referencePolicy:
+      type: Source
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    build: server
+  name: server
+spec:
+  lookupPolicy:
+    local: false
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: server
+  name: server
+spec:
+  failedBuildsHistoryLimit: 5
+  output:
+    to:
+      kind: ImageStreamTag
+      name: server:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    binary: {}
+    type: Binary
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: ubi-quarkus-native-binary-s2i:19.2.1
+        namespace: product-catalog-dev
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: e2tuQR5hpfzBqSSf90wx
+    type: GitHub
+  - generic:
+      secret: FKVcemYnq1uk-NNZFMtO
+    type: Generic

@@ -1,0 +1,10 @@
+---
+- name: Set variables
+  set_fact:
+    server_host: "server-{{namespace}}.{{ocp_subdomain}}"
+
+- name: Create client application
+  k8s:
+    state: present
+    definition: "{{ lookup('template', './templates/deployment.yml') }}"
+    namespace: "{{ namespace }}"

@@ -1,0 +1,6 @@
+---
+- name: Create Nexus
+  k8s:
+    state: present
+    definition: "{{ lookup('file', './files/deployment.yml') }}"
+    namespace: "{{ namespace }}"

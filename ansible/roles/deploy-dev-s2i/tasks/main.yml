@@ -1,0 +1,12 @@
+---
+- name: Create Server S2I
+  k8s:
+    state: present
+    definition: "{{ lookup('file', './files/server-binary-s2i.yml') }}"
+    namespace: "{{ namespace }}"
+
+- name: Create Client S2I
+  k8s:
+    state: present
+    definition: "{{ lookup('file', './files/client-binary-s2i.yml') }}"
+    namespace: "{{ namespace }}"

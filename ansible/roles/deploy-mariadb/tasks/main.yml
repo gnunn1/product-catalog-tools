@@ -1,0 +1,32 @@
+#####################################################
+# Role to Deploy MariaDB                            #
+# Variables:                                        #
+#   database_name: Name of the database             #
+#   database_user: Username for the database        #
+#   database_password: Password for user            #
+#   database_size: Size of database, 1Gi default    #
+#   namespace: Namespace to deploy into             #
+#####################################################
+---
+- name: Create mariadb
+  k8s:
+    state: present
+    definition: "{{ lookup('template', './templates/deployment.yml') }}"
+    namespace: "{{ namespace }}"
+
+- name: Wait for database container to fully initialize
+  pause:
+    seconds: 60
+
+- name: Get mariadb pod
+  command: "oc get pod -l name={{database_name}} -o jsonpath='{.items[0].metadata.name}' -n {{namespace}}"
+  register: mariadb_pod
+
+- name: Upload mariadb import sql
+  shell: "oc rsync -n {{namespace}} {{ role_path }}/files/productdb-init {{ mariadb_pod.stdout }}:/var/lib/mysql/data"
+
+- name: Create mariadb schema
+  command: "oc exec {{ mariadb_pod.stdout}} -n {{namespace}} -- bash -c 'mysql -u root {{database_name}} < /var/lib/mysql/data/productdb-init/schema.sql'"
+
+- name: Import mariadb data
+  command: "oc exec {{ mariadb_pod.stdout}} -n {{namespace}} -- bash -c 'mysql -u root {{database_name}} < /var/lib/mysql/data/productdb-init/import.sql'"

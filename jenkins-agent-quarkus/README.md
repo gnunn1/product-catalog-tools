@@ -1,0 +1,1 @@
+A dockerfile for creating a jenkins agent for natively building a quarkus executable.

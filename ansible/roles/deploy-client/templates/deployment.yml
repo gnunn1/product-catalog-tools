@@ -1,0 +1,87 @@
+apiVersion: v1
+data:
+  config.js: |-
+    window.ENV = {
+      "API_URL":"http://{{server_host}}"
+    }
+kind: ConfigMap
+metadata:
+  name: client
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: client
+  annotations:
+    app.openshift.io/connects-to: server
+  labels:
+    app: client
+    app.kubernetes.io/name: client
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: {{application}}
+    app.kubernetes.io/instance: client
+    app.openshift.io/runtime: nodejs
+spec:
+  replicas: 2
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+      labels:
+        name: client
+    spec:
+      containers:
+        - name: client
+          image: client:latest
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+            name: http
+          volumeMounts:
+          - mountPath: /opt/app-root/src/config.js
+            name: config-data
+            subPath: config.js
+          livenessProbe:
+            httpGet:
+              path: /health.html
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+              httpGet:
+                path: /health.html
+                port: 8080
+                scheme: HTTP
+              timeoutSeconds: 1
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+      volumes:
+      - configMap:
+          name: client
+        name: config-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  app: client
+  name: client
+spec:
+  ports:
+  - name: http
+    port: 8080
+  selector:
+    name: client
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: client
+  labels:
+    app: client
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: client

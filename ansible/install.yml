@@ -1,0 +1,23 @@
+#############################################################
+# Provision Demo into OpenShift/Kubernetes
+#############################################################
+- name: Install Demo
+  hosts: localhost
+
+  vars_files:
+    - vars/vars.yml
+
+  roles:
+  - { role: init-project, project: 'product-catalog-cicd' }
+  - { role: init-project, project: 'product-catalog-dev' }
+  - { role: init-project, project: 'product-catalog-test' }
+  - { role: deploy-mariadb, namespace: 'product-catalog-dev'}
+  - { role: deploy-mariadb, namespace: 'product-catalog-test'}
+  - { role: deploy-client, namespace: 'product-catalog-dev'}
+  - { role: deploy-client, namespace: 'product-catalog-test'}
+  - { role: deploy-server, namespace: 'product-catalog-dev'}
+  - { role: deploy-dev-s2i, namespace: 'product-catalog-dev'}
+  - { role: deploy-server, namespace: 'product-catalog-test'}
+  # - { role: deploy-nexus, namespace: 'product-catalog-cicd'}
+  - { role: deploy-pipeline, namespace: 'product-catalog-cicd', when: cicd_type=="jenkins"}
+  - { role: deploy-tekton-pipeline, namespace: 'product-catalog-cicd', when: cicd_type=="tekton"}

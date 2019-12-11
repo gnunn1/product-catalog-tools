@@ -1,0 +1,24 @@
+---
+- name: Create persistent Jenkins
+  k8s:
+    state: present
+    definition: "{{ lookup('file', './files/jenkins-deployment.yml') }}"
+    namespace: "{{ namespace }}"
+
+- name: Create pipeline
+  k8s:
+    state: present
+    definition: "{{ lookup('file', './files/product-catalog-pipeline.yml') }}"
+    namespace: "{{ namespace }}"
+
+- name: Create jenkins role binding
+  k8s:
+    state: present
+    definition: "{{ lookup('file', './files/jenkins_edit.yml') }}"
+    namespace: "product-catalog-dev"
+
+- name: Create jenkins role binding
+  k8s:
+    state: present
+    definition: "{{ lookup('file', './files/jenkins_edit.yml') }}"
+    namespace: "product-catalog-test"

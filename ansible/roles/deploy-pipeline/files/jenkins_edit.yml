@@ -1,0 +1,14 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+groupNames: null
+kind: RoleBinding
+metadata:
+  name: jenkins_edit
+subjects:
+  - kind: ServiceAccount
+    name: jenkins
+    namespace: product-catalog-cicd
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
