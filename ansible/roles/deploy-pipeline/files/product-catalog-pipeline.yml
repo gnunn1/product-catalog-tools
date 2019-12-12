@@ -92,7 +92,7 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/gnunn1/product-catalog-catalog
+      uri: https://github.com/gnunn1/product-catalog-client
     type: Git
   strategy:
     jenkinsPipelineStrategy: {}
