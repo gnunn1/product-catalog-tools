@@ -75,7 +75,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  app: server
+  labels:
+    app: server
   name: server
 spec:
   ports:

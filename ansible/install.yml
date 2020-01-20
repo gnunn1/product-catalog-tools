@@ -21,3 +21,5 @@
   # - { role: deploy-nexus, namespace: 'product-catalog-cicd'}
   - { role: deploy-pipeline, namespace: 'product-catalog-cicd', when: cicd_type=="jenkins"}
   - { role: deploy-tekton-pipeline, namespace: 'product-catalog-cicd', when: cicd_type=="tekton"}
+  # - { role: init-project, project: 'product-catalog-monitoring', when: monitoring }
+  # - { role: deploy-monitoring, namespace: 'product-catalog-monitoring', when: monitoring }

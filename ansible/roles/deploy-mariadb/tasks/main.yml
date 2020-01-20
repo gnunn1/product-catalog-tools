@@ -15,8 +15,11 @@
     namespace: "{{ namespace }}"
 
 - name: Wait for database container to fully initialize
+  command: "oc rollout status -w deploy/productdb -n {{ namespace }}"
+
+- name: Wait for database pod to be fully ready
   pause:
-    seconds: 60
+    seconds: 10
 
 - name: Get mariadb pod
   command: "oc get pod -l name={{database_name}} -o jsonpath='{.items[0].metadata.name}' -n {{namespace}}"

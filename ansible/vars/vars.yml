@@ -2,8 +2,11 @@
 # Parameters you do need to change
 #########################################################
 # OCP wildcard subdomain
-#ocp_subdomain: apps.cluster.ocplab.com
-ocp_subdomain: apps-crc.testing
+ocp_subdomain: apps.cluster.ocplab.com
+#ocp_subdomain: apps-crc.testing
+
+# Whether to dpeloy prometheus/grafana
+monitoring: true
 
 #########################################################
 # Optional parameters
