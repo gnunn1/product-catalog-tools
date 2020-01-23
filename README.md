@@ -26,7 +26,7 @@ Please follow these steps to install the demo:
 
 Once the playbook has finished executing, a Jenkins pipeline will build the images and deploy the client and server applications. If you go to the Developer console (4.2) and view the topology it will appear as follows:
 
-![alt text](https://raw.githubusercontent.com/gnunn1/quarkus-product-catalog/master/docs/img/client-server-database.png)
+![alt text](https://raw.githubusercontent.com/gnunn1/product-catalog-tools/master/docs/img/client-server-database.png)
 
 ### Test CI/CD
 
