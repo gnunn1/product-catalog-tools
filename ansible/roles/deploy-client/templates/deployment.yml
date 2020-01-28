@@ -7,6 +7,12 @@ data:
 kind: ConfigMap
 metadata:
   name: client
+  labels:
+    app: client
+    app.kubernetes.io/name: client
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: {{application}}
+    app.kubernetes.io/instance: client
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -25,17 +31,16 @@ spec:
   replicas: 2
   template:
     metadata:
-      annotations:
-        alpha.image.policy.openshift.io/resolve-names: '*'
       labels:
         name: client
     spec:
       containers:
         - name: client
-          image: client:latest
+          image: image-registry.openshift-image-registry.svc:5000/{{namespace}}/client:latest
           imagePullPolicy: Always
           ports:
           - containerPort: 8080
+            protocol: TCP
             name: http
           volumeMounts:
           - mountPath: /opt/app-root/src/config.js
@@ -56,6 +61,8 @@ spec:
               periodSeconds: 10
               successThreshold: 1
               failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
       volumes:
       - configMap:
           name: client
@@ -64,8 +71,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  app: client
   name: client
+  labels:
+    app: client
+    app.kubernetes.io/name: client
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: {{application}}
+    app.kubernetes.io/instance: client
 spec:
   ports:
   - name: http
@@ -79,6 +91,10 @@ metadata:
   name: client
   labels:
     app: client
+    app.kubernetes.io/name: client
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: {{application}}
+    app.kubernetes.io/instance: client
 spec:
   port:
     targetPort: http
