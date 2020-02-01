@@ -13,6 +13,13 @@ spec:
     name: 19.2.1
     referencePolicy:
       type: Source
+  - from:
+      kind: DockerImage
+      name: quay.io/quarkus/ubi-quarkus-native-binary-s2i:19.3.1
+    importPolicy: {}
+    name: 19.3.1
+    referencePolicy:
+      type: Source
 ---
 apiVersion: image.openshift.io/v1
 kind: ImageStream
@@ -46,7 +53,7 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: ubi-quarkus-native-binary-s2i:19.2.1
+        name: ubi-quarkus-native-binary-s2i:19.3.1
         namespace: product-catalog-dev
     type: Source
   successfulBuildsHistoryLimit: 5
