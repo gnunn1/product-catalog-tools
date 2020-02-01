@@ -31,4 +31,5 @@ ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 ENV GRAALVM_HOME /opt/graalvm
 ENV JAVA_HOME /opt/graalvm
+ENV JAVA_TOOL_OPTIONS "-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
 ENV PATH $PATH:$JAVA_HOME/bin
