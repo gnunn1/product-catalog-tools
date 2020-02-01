@@ -8,7 +8,7 @@ ARG MAVEN_BASE_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION
 ARG GRAAL_VM_VERSION=19.3.1
 ARG GRAAL_VM_BASE_URL=https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAAL_VM_VERSION}
 
-ARG PKGS="tar zip gzip findutils wget curl unzip gcc glibc-devel zlib-devel shadow-utils"
+ARG PKGS="tar zip gzip findutils wget curl unzip gcc glibc-devel gcc-c++ zlib-devel shadow-utils"
 
 USER root
 
@@ -18,7 +18,6 @@ RUN yum -y install $PKGS \
     && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
     && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn \
     && mkdir -p /opt/graalvm  \
-#    && echo "${GRAAL_VM_BASE_URL}/graalvm-ce-java11-linux-amd64-${GRAAL_VM_VERSION}.tar.gz" \
     && curl --tlsv1 -fsSL -o /tmp/graalvm-ce-amd64.tar.gz ${GRAAL_VM_BASE_URL}/graalvm-ce-java11-linux-amd64-${GRAAL_VM_VERSION}.tar.gz \
     && tar -xzf /tmp/graalvm-ce-amd64.tar.gz -C /opt/graalvm --strip-components=1 \
     && /opt/graalvm/bin/gu --auto-yes install native-image \
