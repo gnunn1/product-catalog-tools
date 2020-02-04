@@ -54,7 +54,7 @@ spec:
       from:
         kind: ImageStreamTag
         name: ubi-quarkus-native-binary-s2i:19.3.1
-        namespace: product-catalog-dev
+        namespace: {{ namespace }}
     type: Source
   successfulBuildsHistoryLimit: 5
   triggers:
