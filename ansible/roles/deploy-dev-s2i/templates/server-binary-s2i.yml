@@ -26,6 +26,9 @@ kind: ImageStream
 metadata:
   labels:
     build: server
+    app: jenkins
+    app.kubernetes.io/component: jenkins
+    app.kubernetes.io/instance: jenkins
   name: server
 spec:
   lookupPolicy:
@@ -36,6 +39,9 @@ kind: BuildConfig
 metadata:
   labels:
     build: server
+    app: jenkins
+    app.kubernetes.io/component: jenkins
+    app.kubernetes.io/instance: jenkins
   name: server
 spec:
   failedBuildsHistoryLimit: 5

@@ -36,6 +36,9 @@ metadata:
   labels:
     app: jenkins
     app.openshift.io/runtime: jenkins
+    app.kubernetes.io/component: jenkins
+    app.kubernetes.io/instance: jenkins
+    app.kubernetes.io/name: jenkins
   name: jenkins
 spec:
   replicas: 1

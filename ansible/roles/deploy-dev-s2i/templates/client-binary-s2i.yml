@@ -4,6 +4,9 @@ kind: ImageStream
 metadata:
   labels:
     build: client
+    app: jenkins
+    app.kubernetes.io/component: jenkins
+    app.kubernetes.io/instance: jenkins
   name: client
 spec:
   lookupPolicy:
@@ -14,6 +17,9 @@ kind: BuildConfig
 metadata:
   labels:
     build: client
+    app: jenkins
+    app.kubernetes.io/component: jenkins
+    app.kubernetes.io/instance: jenkins
   name: client
 spec:
   output:
