@@ -63,7 +63,6 @@ metadata:
     app: product-catalog
   name: server
 spec:
-  nodeSelector: null
   runPolicy: Serial
   source:
     git:
@@ -88,7 +87,6 @@ metadata:
     app: product-catalog
   name: client
 spec:
-  nodeSelector: null
   runPolicy: Serial
   source:
     git:

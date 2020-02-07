@@ -25,3 +25,5 @@ database_password: Demo1234
 database_url: jdbc:mariadb://productdb:3306/productdb
 
 application: product-catalog
+
+quarkus_native_compilation: false

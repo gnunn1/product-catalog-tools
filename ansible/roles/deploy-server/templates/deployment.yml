@@ -26,59 +26,124 @@ metadata:
     app.kubernetes.io/part-of: {{application}}
     app.kubernetes.io/instance: server
 ---
-apiVersion: apps/v1beta1
-kind: Deployment
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
 metadata:
   name: server
   annotations:
     app.openshift.io/connects-to: database
   labels:
     app: server
-    app.kubernetes.io/name: server
-    app.kubernetes.io/component: backend
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: server
     app.kubernetes.io/part-of: {{application}}
     app.kubernetes.io/instance: server
     app.openshift.io/runtime: java
 spec:
-  replicas: 2
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers: []
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    name: server
   template:
     metadata:
-      annotations:
-        alpha.image.policy.openshift.io/resolve-names: '*'
       labels:
         name: server
     spec:
       containers:
         - name: server
           image: image-registry.openshift-image-registry.svc:5000/{{namespace}}/server:latest
-          imagePullPolicy: Always
           ports:
-          - containerPort: 8080
-            protocol: TCP
-          volumeMounts:
-          - mountPath: /home/quarkus/config
-            name: config-volume
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 10
-          readinessProbe:
-              httpGet:
-                path: /health
-                port: 8080
-                scheme: HTTP
-              timeoutSeconds: 1
-              periodSeconds: 10
-              successThreshold: 1
-              failureThreshold: 3
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          imagePullPolicy: Always
+          volumeMounts:
+          - mountPath: /deployments/config
+            name: config-volume
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
       volumes:
       - name: config-volume
         configMap:
           name: server
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: server
+#   annotations:
+#     app.openshift.io/connects-to: database
+#   labels:
+#     app: server
+#     app.kubernetes.io/name: server
+#     app.kubernetes.io/component: backend
+#     app.kubernetes.io/part-of: {{application}}
+#     app.kubernetes.io/instance: server
+#     app.openshift.io/runtime: java
+# spec:
+#   selector:
+#     matchLabels:
+#       name: server
+#   replicas: 2
+#   template:
+#     metadata:
+#       annotations:
+#         alpha.image.policy.openshift.io/resolve-names: '*'
+#       labels:
+#         name: server
+#     spec:
+#       containers:
+#         - name: server
+#           image: image-registry.openshift-image-registry.svc:5000/{{namespace}}/server:latest
+#           imagePullPolicy: Always
+#           ports:
+#           - containerPort: 8080
+#             protocol: TCP
+#           volumeMounts:
+#           - mountPath: /deployments/config
+#           # Below used for native compilation
+#           #- mountPath: /home/quarkus/config
+#             name: config-volume
+#           livenessProbe:
+#             httpGet:
+#               path: /health
+#               port: 8080
+#             initialDelaySeconds: 3
+#             periodSeconds: 10
+#           readinessProbe:
+#               httpGet:
+#                 path: /health
+#                 port: 8080
+#                 scheme: HTTP
+#               timeoutSeconds: 1
+#               periodSeconds: 10
+#               successThreshold: 1
+#               failureThreshold: 3
+#           terminationMessagePath: /dev/termination-log
+#           terminationMessagePolicy: File
+#       volumes:
+#       - name: config-volume
+#         configMap:
+#           name: server
 ---
 apiVersion: v1
 kind: Service

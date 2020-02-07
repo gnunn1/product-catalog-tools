@@ -14,7 +14,7 @@ metadata:
     app.kubernetes.io/part-of: {{application}}
     app.kubernetes.io/instance: client
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: client
@@ -28,6 +28,9 @@ metadata:
     app.kubernetes.io/instance: client
     app.openshift.io/runtime: nodejs
 spec:
+  selector:
+    matchLabels:
+      name: client
   replicas: 2
   template:
     metadata:

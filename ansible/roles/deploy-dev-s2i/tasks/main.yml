@@ -2,8 +2,16 @@
 - name: Create Server S2I
   k8s:
     state: present
-    definition: "{{ lookup('template', './templates/server-binary-s2i.yml') }}"
+    definition: "{{ lookup('template', './templates/server-binary-s2i-native.yml') }}"
     namespace: "{{ namespace }}"
+  when: quarkus_native_compilation
+
+- name: Create Server S2I
+  k8s:
+    state: present
+    definition: "{{ lookup('template', './templates/server-binary-s2i-java.yml') }}"
+    namespace: "{{ namespace }}"
+  when: not quarkus_native_compilation
 
 - name: Create Client S2I
   k8s:
