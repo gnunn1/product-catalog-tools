@@ -2,7 +2,8 @@ apiVersion: v1
 data:
   config.js: |-
     window.ENV = {
-      "API_URL":"http://{{server_host}}"
+      "API_URL":"http://{{server_host}}",
+      "API_KEY":"	43fbc9b33302db65d58553e27d1679ac"
     }
 kind: ConfigMap
 metadata:

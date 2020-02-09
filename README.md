@@ -18,7 +18,7 @@ To install the application in OpenShift, use the ansible-playbook in the ansible
 
 Please follow these steps to install the demo:
 
-1. Update the vars/vars.yml file to reflect your cluster
+1. Update the vars/vars.yml file to reflect your cluster, specifically your wildcard domain
 2. Login into your OpenShift cluster using the oc tool with the credentials you want the demo running under
 3. Switch to the ansible directory and run the following command:
 

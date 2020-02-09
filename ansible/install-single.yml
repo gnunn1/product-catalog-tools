@@ -1,0 +1,15 @@
+#############################################################
+# Provision Demo into OpenShift/Kubernetes
+#############################################################
+- name: Install Single Test Instance
+  hosts: localhost
+
+  vars_files:
+    - vars/vars.yml
+
+  roles:
+  - { role: init-project, project: 'product-catalog' }
+  - { role: deploy-mariadb, namespace: 'product-catalog'}
+  - { role: deploy-client, namespace: 'product-catalog'}
+  - { role: deploy-server, namespace: 'product-catalog'}
+  - { role: deploy-dev-s2i, namespace: 'product-catalog'}
