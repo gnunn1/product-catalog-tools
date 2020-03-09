@@ -86,7 +86,7 @@ spec:
           value: |
               oc tag product-catalog-dev/client:latest product-catalog-test/client:latest
               oc rollout restart deployment/client -n product-catalog-test
-              oc scale deployment/client -n --replicas=2 -n product-catalog-dev
+              oc scale deployment/client --replicas=2 -n product-catalog-dev
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
