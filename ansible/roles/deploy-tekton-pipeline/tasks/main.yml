@@ -1,18 +1,25 @@
 ---
-- name: Create pipeline resources
+- name: Create base
   k8s:
     state: present
-    definition: "{{ lookup('file', './files/resources.yml') }}"
+    definition: "{{ lookup('file', './files/{{ item }}') }}"
     namespace: "{{ namespace }}"
+  with_items:
+    - rolebinding.yml
 
-- name: Create pipeline task
+- name: Create pipeline tasks
   k8s:
     state: present
-    definition: "{{ lookup('file', './files/tasks/quarkus-image-from-git.yml') }}"
+    definition: "{{ lookup('file', './files/tasks/{{ item }}') }}"
     namespace: "{{ namespace }}"
+  with_items:
+    - nodejs-build.yml
+    - oc.yml
 
-- name: Create pipeline
+- name: Create pipelines
   k8s:
     state: present
-    definition: "{{ lookup('file', './files/pipelines/product-catalog-pipeline.yml') }}"
+    definition: "{{ lookup('file', './files/pipelines/{{ item }}') }}"
     namespace: "{{ namespace }}"
+  with_items:
+    - client.yml

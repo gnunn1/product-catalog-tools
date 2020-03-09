@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nodejs-binary
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: client
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master
+    - name: url
+      value: https://github.com/gnunn1/product-catalog-client
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: client
+spec:
+   workspaces:
+    - name: nodejs-binary
+   resources:
+    - name: source
+      type: git
+   tasks:
+    - name: nodejs-build
+      taskRef:
+        name: nodejs-build
+      workspaces:
+        - name: app-binary
+          workspace: nodejs-binary
+      resources:
+        inputs:
+        - name: source
+          resource: source
+    - name: build-image
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: nodejs-binary
+      runAfter:
+        - nodejs-build
+      params:
+        - name: COMMANDS
+          value: |
+              ls $(workspaces.app-binary.path)
+              oc start-build client --from-dir=$(workspaces.app-binary.path) -n product-catalog-dev
+    - name: deploy-dev
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: nodejs-binary
+      runAfter:
+        - build-image
+      params:
+        - name: COMMANDS
+          value: |
+              oc rollout restart deployment/client -n product-catalog-dev
+              oc scale deployment/client --replicas=2 -n product-catalog-dev
+    - name: deploy-test
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: nodejs-binary
+      runAfter:
+        - deploy-dev
+      params:
+        - name: COMMANDS
+          value: |
+              oc tag product-catalog-dev/client:latest product-catalog-test/client:latest
+              oc rollout restart deployment/client -n product-catalog-test
+              oc scale deployment/client -n --replicas=2 -n product-catalog-dev
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: client
+  generateName: client-
+spec:
+  pipelineRef:
+    name: client
+  resources:
+    - name: source
+      resourceRef:
+        name: client
+  workspaces:
+  - name: nodejs-binary
+    persistentVolumeClaim:
+      claimName: nodejs-binary
