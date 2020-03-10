@@ -57,7 +57,7 @@ spec:
         - name: COMMANDS
           value: |
               ls $(workspaces.app-binary.path)
-              oc start-build client --from-dir=$(workspaces.app-binary.path) -n product-catalog-dev
+              oc start-build client --from-dir=$(workspaces.app-binary.path) --wait=true -n product-catalog-dev
     - name: deploy-dev
       taskRef:
         name: openshift-client
@@ -86,7 +86,7 @@ spec:
           value: |
               oc tag product-catalog-dev/client:latest product-catalog-test/client:latest
               oc rollout restart deployment/client -n product-catalog-test
-              oc scale deployment/client --replicas=2 -n product-catalog-dev
+              oc scale deployment/client --replicas=2 -n product-catalog-test
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun

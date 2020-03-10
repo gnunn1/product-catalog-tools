@@ -15,6 +15,7 @@
   with_items:
     - nodejs-build.yml
     - oc.yml
+    - java-build.yml
 
 - name: Create pipelines
   k8s:
@@ -23,3 +24,4 @@
     namespace: "{{ namespace }}"
   with_items:
     - client.yml
+    - server.yml

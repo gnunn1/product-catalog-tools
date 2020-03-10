@@ -6,13 +6,13 @@ ocp_subdomain: apps.cluster.ocplab.com
 #ocp_subdomain: apps-crc.testing
 
 # Whether to dpeloy prometheus/grafana
-monitoring: true
+# monitoring: true
 
 #########################################################
 # Optional parameters
 #########################################################
 # Set the type of CI/CD to use, can be jenkins or tekton
-cicd_type: jenkins
+cicd_type: tekton
 
 #########################################################
 # Parameters you do not need to change
@@ -26,4 +26,5 @@ database_url: jdbc:mariadb://productdb:3306/productdb
 
 application: product-catalog
 
+# Not supported at this time, leave false
 quarkus_native_compilation: false

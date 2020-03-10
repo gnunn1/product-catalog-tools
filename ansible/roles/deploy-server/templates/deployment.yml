@@ -118,6 +118,10 @@ spec:
 #           ports:
 #           - containerPort: 8080
 #             protocol: TCP
+#           - containerPort: 8443
+#             protocol: TCP
+#           - containerPort: 8778
+#             protocol: TCP
 #           volumeMounts:
 #           - mountPath: /deployments/config
 #           # Below used for native compilation
