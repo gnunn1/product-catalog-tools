@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: java-binary
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: server
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master
+    - name: url
+      value: https://github.com/gnunn1/product-catalog-server
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: server
+spec:
+   workspaces:
+    - name: java-binary
+   resources:
+    - name: source
+      type: git
+   tasks:
+    - name: java-build
+      taskRef:
+        name: java-build
+      workspaces:
+        - name: app-binary
+          workspace: java-binary
+      resources:
+        inputs:
+        - name: source
+          resource: source
+    - name: build-image
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: java-binary
+      runAfter:
+        - java-build
+      params:
+        - name: COMMANDS
+          value: |
+              ls $(workspaces.app-binary.path)
+              oc start-build server --from-dir=$(workspaces.app-binary.path) -n product-catalog-dev
+    - name: deploy-dev
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: java-binary
+      runAfter:
+        - build-image
+      params:
+        - name: COMMANDS
+          value: |
+              oc rollout restart deployment/server -n product-catalog-dev
+              oc scale deployment/server --replicas=2 -n product-catalog-dev
+    - name: deploy-test
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: java-binary
+      runAfter:
+        - deploy-dev
+      params:
+        - name: COMMANDS
+          value: |
+              oc tag product-catalog-dev/server:latest product-catalog-test/server:latest
+              oc rollout restart deployment/server -n product-catalog-test
+              oc scale deployment/server --replicas=2 -n product-catalog-test
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: server
+  generateName: server-
+spec:
+  pipelineRef:
+    name: server
+  resources:
+    - name: source
+      resourceRef:
+        name: server
+  workspaces:
+  - name: java-binary
+    persistentVolumeClaim:
+      claimName: java-binary
