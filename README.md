@@ -18,7 +18,7 @@ To install the application in OpenShift, use the ansible-playbook in the ansible
 
 Please follow these steps to install the demo:
 
-1. Update the vars/vars.yml file to reflect your cluster, specifically your wildcard domain
+1. Update the vars/vars.yml file to reflect your cluster, **specifically your wildcard domain if you don't it will not work!**
 2. Login into your OpenShift cluster using the oc tool with the credentials you want the demo running under
 3. Switch to the ansible directory and run the following command:
 
@@ -30,9 +30,13 @@ Once the playbook has finished executing, a Jenkins pipeline will build the imag
 
 ### Test CI/CD
 
+When you install the demo, you have a choice to install it using Jenkins or Tekton for CI/CD. Note that Tekton is in tech preview and if you want to use it you must first install the OpenShift Pipelines operator.
+
 To test the CI/CD, you can add a logo to the product catalog. The code to do this is commented out and can be found in the [nav.jsx](https://github.com/gnunn1/quarkus-product-catalog/blob/master/client/src/js/components/layouts/nav.jsx#L45) file.
 
-Note that at the moment it takes approximately 10 minutes to run the pipeline with 6 of those minutes compiling quarkus (on a m4.xlarge).
+Once you make the code change, start the client pipeline (Jenkins or Tekton). Note that in Tekton the GUI does not support creating a new PipelineRunTask with a workspace, if you want to drive it from a GUI go into the PipelineRuns and simple rerun an existing one.
+
+![alt text](https://raw.githubusercontent.com/gnunn1/product-catalog-tools/master/docs/img/tekton-rerun.png)
 
 
 ### Uninstall from OpenShift
