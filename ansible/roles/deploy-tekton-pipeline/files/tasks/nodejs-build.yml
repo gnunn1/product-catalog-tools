@@ -11,7 +11,7 @@ spec:
         type: git
   steps:
     - name: npm-install
-      image: node
+      image: registry.redhat.io/ubi8/nodejs-10:latest
       command:
         - /bin/sh
         - -c
@@ -19,7 +19,7 @@ spec:
         - npm install
       workingDir: /workspace/source
     - name: build
-      image: node
+      image: registry.redhat.io/ubi8/nodejs-10:latest
       command:
         - /bin/sh
         - -c
@@ -27,7 +27,7 @@ spec:
         - npm run build
       workingDir: /workspace/source
     - name: copy-dist
-      image: node
+      image: registry.redhat.io/ubi8/nodejs-10:latest
       command:
         - /bin/sh
         - -c
