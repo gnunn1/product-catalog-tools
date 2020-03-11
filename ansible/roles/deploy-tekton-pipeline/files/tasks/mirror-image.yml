@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: mirror-image
+spec:
+  workspaces:
+  - name: app-binary
+  inputs:
+    resources:
+      - name: source-image
+        type: image
+      - name: target-image
+        type: image
+  steps:
+    - name: run-commands
+      image: quay.io/openshift/origin-cli:latest
+      script: |
+        #!/usr/bin/env bash
+        oc whoami
+        oc image mirror --insecure --registry-config=/workspace/.docker/config.json $(inputs.resources.source-image.url) $(inputs.resources.target-image.url)
+      volumeMounts:
+        - name: docker-config
+          mountPath: /workspace/.docker/
+  volumes:
+    - name: docker-config
+      secret:
+        secretName: docker-config
+        items:
+          - key: .dockerconfigjson
+            path: config.json
