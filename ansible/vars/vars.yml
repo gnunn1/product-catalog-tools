@@ -14,6 +14,23 @@ ocp_subdomain: apps.cluster.ocplab.com
 # Set the type of CI/CD to use, can be jenkins or tekton
 cicd_type: tekton
 
+# Prefix to use for all of the projects. If you change the value,
+# Jenkins pipelines will need to be adjusted since they are in repos
+project_prefix: product-catalog
+
+# If you fork the repos change the below
+git_repo_owner: gnunn1
+
+# If you want to use an enterprise registry with the demo
+# Only supported with tekton right now
+use_enterprise_registry: false
+# Friendly name used when naming various k8s objects like secrets
+registry_name: quay
+registry_uri: quay.io
+registry_username: gnunn
+server_image_repository: gnunn/server
+client_image_repository: gnunn/client
+
 #########################################################
 # Parameters you do not need to change
 #########################################################

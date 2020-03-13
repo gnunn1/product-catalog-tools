@@ -38,6 +38,15 @@ Once you make the code change, start the client pipeline (Jenkins or Tekton). No
 
 ![alt text](https://raw.githubusercontent.com/gnunn1/product-catalog-tools/master/docs/img/tekton-rerun.png)
 
+### Enterprise Registry
+
+You can provision the demo to use an enterprise registry such as quay.io. To do, set the ```use_enterprise_registry``` to true and fill out the rest of the variables accordingly.
+
+You will need to provide an ```registry_password``` which is not included in the vars.yml, either add it, use an ansible vault or pass it on the command line:
+
+```
+ansible-playbook install.yml -e registry_password=XXXXX
+```
 
 ### Uninstall from OpenShift
 

@@ -1,4 +1,29 @@
 ---
+- name: Delete registry secret
+  k8s:
+    state: absent
+    kind: Secret
+    name: "{{ item }}"
+    namespace: "{{ namespace }}"
+  ignore_errors: true
+  when: use_enterprise_registry
+  with_items:
+    - src-docker-config
+    - dest-docker-config
+
+- name: Create external registry secret
+  command: oc create secret docker-registry dest-docker-config --docker-server="{{registry_uri}}" --docker-username="{{registry_username}}" --docker-password="{{registry_password}}" -n {{namespace}}
+  when: use_enterprise_registry
+
+- name: Get pipeline token
+  command: oc serviceaccounts get-token pipeline
+  register: pipeline_token
+  when: use_enterprise_registry
+
+- name: Create internal registry secret
+  command: oc create secret docker-registry src-docker-config --docker-server="image-registry.openshift-image-registry.svc:5000" --docker-username="pipeline" --docker-password="{{pipeline_token.stdout}}" -n {{namespace}}
+  when: use_enterprise_registry
+
 - name: Create base
   k8s:
     state: present
@@ -16,11 +41,12 @@
     - nodejs-build.yml
     - oc.yml
     - java-build.yml
+    - mirror-image.yml
 
 - name: Create pipelines
   k8s:
     state: present
-    definition: "{{ lookup('file', './files/pipelines/{{ item }}') }}"
+    definition: "{{ lookup('template', './templates/pipelines/{{ item }}') }}"
     namespace: "{{ namespace }}"
   with_items:
     - client.yml

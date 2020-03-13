@@ -6,6 +6,6 @@
     - vars/vars.yml
 
   roles:
-  - { role: delete-project, project: 'product-catalog-cicd' }
-  - { role: delete-project, project: 'product-catalog-dev' }
-  - { role: delete-project, project: 'product-catalog-test' }
+  - { role: delete-project, project: '{{project_prefix}}-cicd' }
+  - { role: delete-project, project: '{{project_prefix}}-dev' }
+  - { role: delete-project, project: '{{project_prefix}}-test' }
