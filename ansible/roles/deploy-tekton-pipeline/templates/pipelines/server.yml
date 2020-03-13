@@ -21,7 +21,7 @@ spec:
     - name: revision
       value: master
     - name: url
-      value: https://github.com/gnunn1/product-catalog-server
+      value: https://github.com/{{git_repo_owner}}/product-catalog-server
 ---
 {% if use_enterprise_registry %}
 apiVersion: tekton.dev/v1alpha1
