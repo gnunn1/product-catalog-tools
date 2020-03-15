@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: mirror-image
+spec:
+  workspaces:
+  - name: app-binary
+  inputs:
+    resources:
+      - name: src-image
+        type: image
+      - name: dest-image
+        type: image
+  steps:
+    - name: run-commands
+      image: quay.io/gnunn/skopeo:1.41
+      script: |
+        #!/usr/bin/env bash
+        echo "Copying image docker://$(inputs.resources.src-image.url) to docker://$(inputs.resources.dest-image.url)"
+        skopeo copy --src-tls-verify=false --dest-tls-verify=false --src-authfile=/workspace/src/.docker/config.json --dest-authfile=/workspace/dest/.docker/config.json docker://$(inputs.resources.src-image.url) docker://$(inputs.resources.dest-image.url)
+      volumeMounts:
+        - name: src-docker-config
+          mountPath: /workspace/src/.docker/
+        - name: dest-docker-config
+          mountPath: /workspace/dest/.docker/
+  volumes:
+    - name: src-docker-config
+      secret:
+        secretName: src-docker-config
+        items:
+          - key: .dockerconfigjson
+            path: config.json
+    - name: dest-docker-config
+      secret:
+        secretName: dest-docker-config
+        items:
+          - key: .dockerconfigjson
+            path: config.json

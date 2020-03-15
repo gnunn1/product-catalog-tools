@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+  application.properties: |
+    # Product Datasource
+    quarkus.datasource.url=jdbc:mariadb://productdb:3306/productdb
+    quarkus.datasource.driver=org.mariadb.jdbc.Driver
+    quarkus.datasource.username=productdb
+    quarkus.datasource.password=Demo1234
+    quarkus.datasource.min-size=1
+    quarkus.datasource.max-size=5
+    quarkus.hibernate-orm.database.generation=none
+
+    # CORS
+    quarkus.http.cors=true
+    quarkus.http.cors.origins=${CORS_ORIGIN:*}
+
+    # Swagger UI
+    quarkus.swagger-ui.always-include=true
+kind: ConfigMap
+metadata:
+  name: server
+  labels:
+    app: server
+    app.kubernetes.io/name: server
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: server

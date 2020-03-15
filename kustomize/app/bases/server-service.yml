@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: server
+    app.kubernetes.io/name: server
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: server
+  name: server
+spec:
+  ports:
+  - name: http
+    port: 8080
+  selector:
+    name: server

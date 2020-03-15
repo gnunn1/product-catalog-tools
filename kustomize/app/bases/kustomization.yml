@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/part-of: product-catalog
+
+resources:
+  - db-pvc.yml
+  - db-secret.yml
+  - db-service.yml
+  - db-deployment.yml
+  - server-configmap.yml
+  - server-service.yml
+  - server-route.yml
+  - server-deploymentconfig.yml
+  - client-configmap.yml
+  - client-service.yml
+  - client-route.yml
+  - client-deployment.yml

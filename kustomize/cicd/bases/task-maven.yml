@@ -1,0 +1,73 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: maven
+spec:
+  workspaces:
+  - name: app-binary
+  inputs:
+    params:
+    - name: GOALS
+      description: The Maven goals to run
+      type: array
+      default:
+      - "package"
+    - name: MAVEN_MIRROR_URL
+      description: The Maven bucketrepo- mirror
+      type: string
+      default: ""
+    resources:
+    - name: source
+      targetPath: /
+      type: git
+  steps:
+    - name: mvn-settings
+      image: registry.redhat.io/openjdk/openjdk-8-rhel8:latest
+      workingDir: /tekton/home/.m2
+      command:
+        - '/bin/bash'
+        - '-c'
+      args:
+        - |-
+          [[ -f ${HOME}/.m2/settings.xml ]] && \
+          echo 'using existing ${HOME}/.m2/settings.xml' && \
+          cat ${HOME}/.m2/settings.xml && exit 0
+
+          [[ -n '$(inputs.params.MAVEN_MIRROR_URL)' ]] && \
+          cat > ${HOME}/.m2/settings.xml <<EOF
+          <settings>
+            <mirrors>
+              <mirror>
+                <id>mirror.default</id>
+                <name>mirror.default</name>
+                <url>$(inputs.params.MAVEN_MIRROR_URL)</url>
+                <mirrorOf>*</mirrorOf>
+              </mirror>
+            </mirrors>
+          </settings>
+          EOF
+
+          [[ -f ${HOME}/.m2/settings.xml ]] && cat ${HOME}/.m2/settings.xml
+          [[ -f ${HOME}/.m2/settings.xml ]] || echo skipping settings
+      volumeMounts:
+        - name: m2-repository
+          mountPath: /tekton/home/.m2
+    - name: mvn-goals
+      image: registry.redhat.io/openjdk/openjdk-8-rhel8:latest
+      command:
+        - /usr/bin/mvn
+      args:
+        - "$(inputs.params.GOALS)"
+      volumeMounts:
+        - name: m2-repository
+          mountPath: /tekton/home/.m2
+    - name: mvn-copy-dist
+      image: registry.redhat.io/openjdk/openjdk-8-rhel8:latest
+      command:
+        - /bin/sh
+        - -c
+      args:
+        - cp -R /workspace/target/*-runner.jar $(workspaces.app-binary.path)
+  volumes:
+    - name: m2-repository
+      emptyDir: {}

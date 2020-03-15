@@ -1,0 +1,84 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: server
+spec:
+   workspaces:
+    - name: app-binary
+   resources:
+    - name: source
+      type: git
+    - name: internal-image
+      type: image
+    - name: repository-image
+      type: image
+   tasks:
+    - name: build
+      taskRef:
+        name: maven
+      workspaces:
+        - name: app-binary
+          workspace: app-binary
+      resources:
+        inputs:
+        - name: source
+          resource: source
+      params:
+        - name: MAVEN_MIRROR_URL
+          value: "http://nexus:8081/repository/maven-public/"
+    - name: build-image
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: app-binary
+      runAfter:
+        - build
+      params:
+        - name: COMMANDS
+          value: |
+              ls $(workspaces.app-binary.path)
+              oc start-build server --from-dir=$(workspaces.app-binary.path) --wait=true
+    - name: deploy-dev
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: app-binary
+      runAfter:
+        - build-image
+      params:
+        - name: COMMANDS
+          value: |
+              oc tag product-catalog-cicd/server:latest product-catalog-dev/server:latest
+              oc rollout latest dc/server -n product-catalog-dev
+              oc scale dc/server --replicas=2 -n product-catalog-dev
+    - name: promote-image
+      taskRef:
+        name: mirror-image
+        kind: Task
+      runAfter:
+        - deploy-dev
+      resources:
+        inputs:
+        - name: src-image
+          resource: internal-image
+        - name: dest-image
+          resource: repository-image
+    - name: deploy-test
+      taskRef:
+        name: openshift-client
+        kind: Task
+      workspaces:
+        - name: app-binary
+          workspace: app-binary
+      runAfter:
+        - promote-image
+      params:
+        - name: COMMANDS
+          value: |
+              oc tag product-catalog-dev/server:latest product-catalog-test/server:latest
+              oc rollout latest dc/server -n product-catalog-test
+              oc scale dc/server --replicas=2 -n product-catalog-test
