@@ -7,7 +7,7 @@ echo "Adding rolebindings"
 oc apply -k ./security/bases
 
 echo "Deploy nexus"
-oc apply =k ./nexus/bases
+oc apply -k ./nexus/bases
 
 echo "Creating product-catalog-dev project"
 kustomize build ./app/overlays/dev --reorder none | oc apply -f -
