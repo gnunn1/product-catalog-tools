@@ -8,13 +8,6 @@ spec:
    resources:
     - name: source
       type: git
-    - name: internal-image
-      type: image
-    - name: repository-image
-      type: image
-   params:
-     - name: push-image
-       type: string
    tasks:
     - name: build
       taskRef:
@@ -58,23 +51,6 @@ spec:
               oc tag product-catalog-cicd/server:latest product-catalog-dev/server:latest
               oc rollout latest dc/server -n product-catalog-dev
               oc scale dc/server --replicas=2 -n product-catalog-dev
-    - name: promote-image
-      conditions:
-      - conditionRef: push-image
-        params:
-          - name: push
-            value: "$(params.push-image)"
-      taskRef:
-        name: push-image
-        kind: Task
-      runAfter:
-        - deploy-dev
-      resources:
-        inputs:
-        - name: src-image
-          resource: internal-image
-        - name: dest-image
-          resource: repository-image
     - name: deploy-test
       taskRef:
         name: openshift-client
@@ -83,7 +59,7 @@ spec:
         - name: app-binary
           workspace: app-binary
       runAfter:
-        - promote-image
+        - deploy-dev
       params:
         - name: COMMANDS
           value: |

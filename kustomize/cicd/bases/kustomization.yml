@@ -9,8 +9,6 @@ resources:
 - task-push-image.yml
 - condition-push-image.yml
 # Server pipeline
-- server-dest-image-resource.yml
-- server-src-image-resource.yml
 - server-imagestream.yml
 - server-buildconfig.yml
 - server-pvc.yml
@@ -18,8 +16,6 @@ resources:
 - server-pipeline.yml
 - server-pipelinerun.yml
 # Client pipeline
-- client-dest-image-resource.yml
-- client-src-image-resource.yml
 - client-imagestream.yml
 - client-buildconfig.yml
 - client-pvc.yml

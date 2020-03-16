@@ -1,0 +1,1 @@
+Uses kustomize to deploy the demo instead of Ansible, see steps in ```deploy.sh``` script. Very much a work in progress.

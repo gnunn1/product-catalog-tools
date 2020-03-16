@@ -6,19 +6,10 @@ metadata:
 spec:
   pipelineRef:
     name: server
-  params:
-    - name: push
-      value: "false"
   resources:
     - name: source
       resourceRef:
         name: server
-    - name: internal-image
-      resourceRef:
-        name: server-src-image
-    - name: repository-image
-      resourceRef:
-        name: server-dest-image
   workspaces:
   - name: app-binary
     persistentVolumeClaim:
