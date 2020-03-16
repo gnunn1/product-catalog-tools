@@ -12,6 +12,9 @@ spec:
       type: image
     - name: repository-image
       type: image
+   params:
+     - name: push-image
+       type: string
    tasks:
     - name: build
       taskRef:
@@ -53,8 +56,13 @@ spec:
               oc rollout restart deployment/client -n product-catalog-dev
               oc scale deployment/client --replicas=2 -n product-catalog-dev
     - name: promote-image
+      conditions:
+      - conditionRef: push-image
+        params:
+          - name: push
+            value: "$(params.push-image)"
       taskRef:
-        name: mirror-image
+        name: push-image
         kind: Task
       runAfter:
         - deploy-dev

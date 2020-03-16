@@ -6,7 +6,8 @@ resources:
 - task-maven.yml
 - task-npm.yml
 - task-oc.yml
-- task-mirror-image.yml
+- task-push-image.yml
+- condition-push-image.yml
 # Server pipeline
 - server-dest-image-resource.yml
 - server-src-image-resource.yml

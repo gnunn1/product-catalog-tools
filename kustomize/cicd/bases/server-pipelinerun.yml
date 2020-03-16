@@ -6,6 +6,9 @@ metadata:
 spec:
   pipelineRef:
     name: server
+  params:
+    - name: push
+      value: "false"
   resources:
     - name: source
       resourceRef:

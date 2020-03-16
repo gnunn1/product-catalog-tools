@@ -5,3 +5,18 @@ bases:
 - ../../bases
 
 namespace: product-catalog-dev
+
+patchesJson6902:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: client
+  path: patch-client-deployment.yml
+
+- target:
+    group: apps.openshift.io
+    version: v1
+    kind: DeploymentConfig
+    name: server
+  path: patch-server-deploymentconfig.yml
