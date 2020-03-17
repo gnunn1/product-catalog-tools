@@ -3,6 +3,12 @@ kind: Service
 metadata:
   app: productdb
   name: productdb
+  labels:
+    app: server
+    app.kubernetes.io/name: productdb
+    app.kubernetes.io/component: database
+    app.kubernetes.io/instance: productdb
+    app.kubernetes.io/part-of: product-catalog
 spec:
   ports:
   - name: tcp

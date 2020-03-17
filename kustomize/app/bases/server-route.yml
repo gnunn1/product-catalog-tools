@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/name: server
     app.kubernetes.io/component: backend
     app.kubernetes.io/instance: server
+    app.kubernetes.io/part-of: product-catalog
 spec:
   port:
     targetPort: http

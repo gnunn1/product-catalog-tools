@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/name: server
     app.kubernetes.io/instance: server
     app.openshift.io/runtime: java
+    app.kubernetes.io/part-of: product-catalog
 spec:
   strategy:
     type: Rolling
