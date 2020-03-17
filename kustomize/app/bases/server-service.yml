@@ -13,3 +13,5 @@ spec:
     port: 8080
   selector:
     name: server
+  sessionAffinity: None
+  type: ClusterIP
