@@ -6,7 +6,7 @@ metadata:
 data:
   config.js: |-
     window.ENV = {
-      "API_URL":"http://server-product-catalog-dev.apps.cluster-tor-f493.tor-f493.example.opentlc.com",
+      "API_URL":"http://server-product-catalog-dev.apps-crc.testing/",
       "API_KEY":"	43fbc9b33302db65d58553e27d1679ac"
     }
 ---
@@ -18,7 +18,7 @@ metadata:
 data:
   config.js: |-
     window.ENV = {
-      "API_URL":"http://server-product-catalog-test.apps.cluster-tor-f493.tor-f493.example.opentlc.com",
+      "API_URL":"http://server-product-catalog-test.apps-crc.testing/",
       "API_KEY":"	43fbc9b33302db65d58553e27d1679ac"
     }
 ---
@@ -41,10 +41,13 @@ data:
 
     # CORS
     quarkus.http.cors=true
-    quarkus.http.cors.origins=http://client-product-catalog-dev.apps.cluster-tor-f493.tor-f493.example.opentlc.com
+    quarkus.http.cors.origins=http://client-product-catalog-dev.apps-crc.testing
 
     # Swagger UI
     quarkus.swagger-ui.always-include=true
+
+    # Logging
+    quarkus.log.level=CONFIG
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -65,7 +68,7 @@ data:
 
     # CORS
     quarkus.http.cors=true
-    quarkus.http.cors.origins=http://client-product-catalog-test.apps.cluster-tor-f493.tor-f493.example.opentlc.com
+    quarkus.http.cors.origins=http://client-product-catalog-test.apps-crc.testing
 
     # Swagger UI
     quarkus.swagger-ui.always-include=true

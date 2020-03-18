@@ -68,7 +68,19 @@ spec:
           volumeMounts:
           - mountPath: /var/lib/mysql/data
             name: productdb-data
+          - mountPath: /opt/app-root/src/mysql-init/90-init-data.sh
+            name: productdb-init
+            subPath: 90-init-database.sh
+          - mountPath: /opt/app-root/src/mysql-data/import.sql
+            name: productdb-init
+            subPath: import.sql
+          - mountPath: /opt/app-root/src/mysql-data/schema.sql
+            name: productdb-init
+            subPath: schema.sql
       volumes:
       - name: productdb-data
         persistentVolumeClaim:
           claimName: productdb
+      - configMap:
+          name: productdb-init
+        name: productdb-init
