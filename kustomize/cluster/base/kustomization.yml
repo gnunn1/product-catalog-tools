@@ -5,3 +5,6 @@ bases:
 - ../../app/overlays/dev
 - ../../app/overlays/test
 - ../../cicd/bases
+
+resources:
+- rolebinding.yml
