@@ -33,7 +33,7 @@ spec:
           value: |
               ls $(workspaces.app-binary.path)
               oc start-build client --from-dir=$(workspaces.app-binary.path) --wait=true
-    - name: deploy-dev
+    - name: tag-dev-image
       taskRef:
         name: openshift-client
         kind: Task
@@ -46,9 +46,20 @@ spec:
         - name: COMMANDS
           value: |
               oc tag product-catalog-cicd/client:latest product-catalog-dev/client:latest
-              oc rollout restart deployment/client -n product-catalog-dev
-              oc scale deployment/client --replicas=1 -n product-catalog-dev
-    - name: deploy-test
+    - name: deploy-dev
+      taskRef:
+        name: deploy
+        kind: Task
+      runAfter:
+        - tag-dev-image
+      params:
+        - name: NAME
+          value: client
+        - name: NAMESPACE
+          value: product-catalog-dev
+        - name: REPLICAS
+          value: "2"
+    - name: tag-test-image
       taskRef:
         name: openshift-client
         kind: Task
@@ -61,5 +72,16 @@ spec:
         - name: COMMANDS
           value: |
               oc tag product-catalog-dev/client:latest product-catalog-test/client:latest
-              oc rollout restart deployment/client -n product-catalog-test
-              oc scale deployment/client --replicas=1 -n product-catalog-test
+    - name: deploy-test
+      taskRef:
+        name: deploy
+        kind: Task
+      runAfter:
+        - tag-test-image
+      params:
+        - name: NAME
+          value: client
+        - name: NAMESPACE
+          value: product-catalog-test
+        - name: REPLICAS
+          value: "3"
