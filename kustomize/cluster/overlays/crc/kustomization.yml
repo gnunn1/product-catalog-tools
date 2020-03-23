@@ -4,5 +4,8 @@ kind: Kustomization
 bases:
 - ../../base
 
+resources:
+- pull-secret.yml
+
 patchesStrategicMerge:
 - patch.yml

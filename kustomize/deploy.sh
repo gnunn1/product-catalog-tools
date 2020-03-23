@@ -7,4 +7,4 @@ oc new-project product-catalog-cicd
 # oc apply -k ./nexus/bases
 
 # Use the overlay that makes sense, here we are using a Code Ready Containers overlay
-kustomize build ./cluster/overlays/crc --reorder none | oc apply -f -
+kustomize build ./cluster/overlays/rhpds --reorder none | oc apply -f -
