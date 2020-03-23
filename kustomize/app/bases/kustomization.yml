@@ -10,7 +10,7 @@ resources:
   - server-configmap.yml
   - server-service.yml
   - server-route.yml
-  - server-deploymentconfig.yml
+  - server-deployment.yml
   - client-configmap.yml
   - client-service.yml
   - client-route.yml

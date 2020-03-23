@@ -36,8 +36,7 @@ data:
     quarkus.datasource.password=Demo1234
     quarkus.datasource.min-size=1
     quarkus.datasource.max-size=5
-    quarkus.hibernate-orm.database.generation=create
-    quarkus.hibernate-orm.sql-load-script=import.sql
+    quarkus.hibernate-orm.database.generation=none
 
     # CORS
     quarkus.http.cors=true
@@ -45,9 +44,6 @@ data:
 
     # Swagger UI
     quarkus.swagger-ui.always-include=true
-
-    # Logging
-    quarkus.log.level=CONFIG
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -63,8 +59,7 @@ data:
     quarkus.datasource.password=Demo1234
     quarkus.datasource.min-size=1
     quarkus.datasource.max-size=5
-    quarkus.hibernate-orm.database.generation=create
-    quarkus.hibernate-orm.sql-load-script=import.sql
+    quarkus.hibernate-orm.database.generation=none
 
     # CORS
     quarkus.http.cors=true

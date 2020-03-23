@@ -15,8 +15,8 @@ patchesJson6902:
   path: patch-client-deployment.yml
 
 - target:
-    group: apps.openshift.io
+    group: apps
     version: v1
-    kind: DeploymentConfig
+    kind: Deployment
     name: server
   path: patch-server-deploymentconfig.yml

@@ -47,7 +47,7 @@ spec:
           value: |
               oc tag product-catalog-cicd/client:latest product-catalog-dev/client:latest
               oc rollout restart deployment/client -n product-catalog-dev
-              oc scale deployment/client --replicas=2 -n product-catalog-dev
+              oc scale deployment/client --replicas=1 -n product-catalog-dev
     - name: deploy-test
       taskRef:
         name: openshift-client
@@ -62,4 +62,4 @@ spec:
           value: |
               oc tag product-catalog-dev/client:latest product-catalog-test/client:latest
               oc rollout restart deployment/client -n product-catalog-test
-              oc scale deployment/client --replicas=2 -n product-catalog-test
+              oc scale deployment/client --replicas=1 -n product-catalog-test
