@@ -10,7 +10,7 @@ metadata:
     app: nexus
 spec:
   selector:
-    app: nexus
+    name: nexus
   ports:
     - port: 8081
       name: http

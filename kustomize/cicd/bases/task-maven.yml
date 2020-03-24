@@ -23,18 +23,17 @@ spec:
   steps:
     - name: mvn-settings
       image: docker.io/maven:3.6.3-jdk-8
-      workingDir: /tekton/home/.m2
       command:
         - '/bin/bash'
         - '-c'
       args:
         - |-
-          [[ -f ${HOME}/.m2/settings.xml ]] && \
+          [[ -f /.m2/settings.xml ]] && \
           echo 'using existing ${HOME}/.m2/settings.xml' && \
-          cat ${HOME}/.m2/settings.xml && exit 0
+          cat /.m2/settings.xml && exit 0
 
           [[ -n '$(inputs.params.MAVEN_MIRROR_URL)' ]] && \
-          cat > ${HOME}/.m2/settings.xml <<EOF
+          cat > /.m2/settings.xml <<EOF
           <settings>
             <mirrors>
               <mirror>
@@ -47,8 +46,8 @@ spec:
           </settings>
           EOF
 
-          [[ -f ${HOME}/.m2/settings.xml ]] && cat ${HOME}/.m2/settings.xml
-          [[ -f ${HOME}/.m2/settings.xml ]] || echo skipping settings
+          [[ -f /.m2/settings.xml ]] && cat /.m2/settings.xml
+          [[ -f /.m2/settings.xml ]] || echo skipping settings
       volumeMounts:
         - name: m2-repository
           mountPath: /.m2
@@ -70,4 +69,5 @@ spec:
         - cp -R /workspace/target/*-runner.jar $(workspaces.app-binary.path)
   volumes:
     - name: m2-repository
-      emptyDir: {}
+      persistentVolumeClaim:
+        claimName: m2-cache

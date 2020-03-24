@@ -5,6 +5,7 @@ bases:
 - ../../app/overlays/dev
 - ../../app/overlays/test
 - ../../cicd/bases
+- ../../nexus/overlays/product-catalog-cicd
 
 resources:
 - rolebinding.yml

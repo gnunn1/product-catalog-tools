@@ -25,6 +25,9 @@ spec:
             requests:
               memory: "2Gi"
               cpu: "500m"
+          env:
+            - name: NEXUS_SECURITY_RANDOMPASSWORD
+              value: "false"
           ports:
             - containerPort: 8081
           readinessProbe:

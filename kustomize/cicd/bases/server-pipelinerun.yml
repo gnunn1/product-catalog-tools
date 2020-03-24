@@ -10,6 +10,12 @@ spec:
     - name: source
       resourceRef:
         name: server
+  params:
+    - name: MAVEN_MIRROR_URL
+      # value: http://nexus:8081/repository/maven-public/
+      value: ""
+    - name: REPLICAS
+      value: "2"
   workspaces:
   - name: app-binary
     persistentVolumeClaim:
