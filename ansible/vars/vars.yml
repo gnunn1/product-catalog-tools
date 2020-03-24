@@ -23,7 +23,7 @@ git_repo_owner: gnunn1
 
 # If you want to use an enterprise registry with the demo
 # Only supported with tekton right now
-use_enterprise_registry: false
+use_enterprise_registry: true
 # Friendly name used when naming various k8s objects like secrets
 registry_name: quay
 registry_uri: quay.io

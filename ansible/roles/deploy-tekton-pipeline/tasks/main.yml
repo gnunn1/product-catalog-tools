@@ -38,9 +38,9 @@
     definition: "{{ lookup('file', './files/tasks/{{ item }}') }}"
     namespace: "{{ namespace }}"
   with_items:
-    - nodejs-build.yml
+    - npm.yml
     - oc.yml
-    - java-build.yml
+    - maven.yml
     - mirror-image.yml
 
 - name: Create pipelines

@@ -36,7 +36,7 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: nginx:1.12
+        name: nginx:latest
         namespace: openshift
     type: Source
   triggers:

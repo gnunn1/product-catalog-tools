@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: nodejs-build
+  name: npm
 spec:
   workspaces:
   - name: app-binary

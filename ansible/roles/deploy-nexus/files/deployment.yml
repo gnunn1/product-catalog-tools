@@ -8,19 +8,23 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 8Gi
+      storage: 10Gi
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nexus
   app: nexus
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+       name: nexus
   template:
     metadata:
       labels:
         app: nexus
+        name: nexus
         app.openshift.io/runtime: nexus
     spec:
       containers:

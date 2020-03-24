@@ -24,7 +24,7 @@ spec:
     requests:
       storage: {{database_size|default("1Gi", true)}}
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{database_name}}
@@ -34,9 +34,12 @@ metadata:
     app.kubernetes.io/component: database
     app.kubernetes.io/part-of: {{application}}
     app.kubernetes.io/instance: database
-    app.openshift.io/runtime: mariadb    
+    app.openshift.io/runtime: mariadb
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+       name: {{database_name}}
   strategy:
     type: Recreate
   template:

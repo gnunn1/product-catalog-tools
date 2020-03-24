@@ -45,7 +45,6 @@ spec:
     value: {{registry_uri}}/{{server_image_repository}}:latest
 ---
 {% endif %}
-
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
@@ -63,9 +62,9 @@ spec:
       type: image
 {% endif %}
    tasks:
-    - name: java-build
+    - name: build
       taskRef:
-        name: java-build
+        name: maven
       workspaces:
         - name: app-binary
           workspace: java-binary
@@ -73,6 +72,9 @@ spec:
         inputs:
         - name: source
           resource: source
+      params:
+        - name: MAVEN_MIRROR_URL
+          value: "http://nexus:8081/repository/maven-public/"
     - name: build-image
       taskRef:
         name: openshift-client
@@ -81,7 +83,7 @@ spec:
         - name: app-binary
           workspace: java-binary
       runAfter:
-        - java-build
+        - build
       params:
         - name: COMMANDS
           value: |

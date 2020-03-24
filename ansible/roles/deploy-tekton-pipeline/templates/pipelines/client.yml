@@ -62,9 +62,9 @@ spec:
       type: image
 {% endif %}
    tasks:
-    - name: nodejs-build
+    - name: build
       taskRef:
-        name: nodejs-build
+        name: npm
       workspaces:
         - name: app-binary
           workspace: nodejs-binary
@@ -80,7 +80,7 @@ spec:
         - name: app-binary
           workspace: nodejs-binary
       runAfter:
-        - nodejs-build
+        - build
       params:
         - name: COMMANDS
           value: |
