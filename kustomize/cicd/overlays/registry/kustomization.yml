@@ -10,20 +10,8 @@ resources:
 - client-dest-image-resource.yml
 - client-src-image-resource.yml
 
-patchesJson6902:
-- target:
-    group: tekton.dev
-    version: v1alpha1
-    kind: Pipeline
-    name: server
-  path: patch-server-pipeline.yml
-- target:
-    group: tekton.dev
-    version: v1alpha1
-    kind: Pipeline
-    name: client
-  path: patch-client-pipeline.yml
-
 patchesStrategicMerge:
+- patch-server-pipeline.yml
+- patch-client-pipeline.yml
 - patch-server-pipelinerun.yml
 - patch-client-pipelinerun.yml

@@ -9,7 +9,7 @@ spec:
         name: client
     - name: internal-image
       resourceRef:
-        name: server-src-image
+        name: client-src-image
     - name: repository-image
       resourceRef:
-        name: server-dest-image
+        name: client-dest-image

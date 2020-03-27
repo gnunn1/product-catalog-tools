@@ -19,4 +19,4 @@ patchesJson6902:
     version: v1
     kind: Deployment
     name: server
-  path: patch-server-deploymentconfig.yml
+  path: patch-server-deployment.yml

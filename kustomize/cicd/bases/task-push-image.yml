@@ -13,16 +13,14 @@ spec:
         type: image
   steps:
     - name: run-commands
-      image: quay.io/gnunn/skopeo:1.41
+      image: quay.io/gnunn/skopeo:latest
       script: |
         #!/usr/bin/env bash
         echo "Copying image docker://$(inputs.resources.src-image.url) to docker://$(inputs.resources.dest-image.url)"
         TOKEN="$(oc whoami -t)"
-        USER="$(oc whoami)""
-        skopeo copy --src-tls-verify=false --dest-tls-verify=false --src-creds="$USER:$TOKEN" --dest-authfile=/workspace/dest/.docker/config.json docker://$(inputs.resources.src-image.url) docker://$(inputs.resources.dest-image.url)
+        USER="pipeline"
+        skopeo copy --src-tls-verify=false --dest-tls-verify=false --src-creds="${USER}:${TOKEN}" --dest-authfile=/workspace/dest/.docker/config.json docker://$(inputs.resources.src-image.url) docker://$(inputs.resources.dest-image.url)
       volumeMounts:
-        - name: src-docker-config
-          mountPath: /workspace/src/.docker/
         - name: dest-docker-config
           mountPath: /workspace/dest/.docker/
   volumes:

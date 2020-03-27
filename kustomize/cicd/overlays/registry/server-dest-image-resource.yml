@@ -1,9 +1,9 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: client-dest-image
+  name: server-dest-image
 spec:
   type: image
   params:
   - name: url
-    value: quay.io/gnunn/client:latest
+    value: someregistry/somerepo/server:latest
