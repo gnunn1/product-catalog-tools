@@ -1,0 +1,10 @@
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: nexus
+spec:
+  host: nexus-product-catalog-tools.apps.cluster.ocplab.com
+
+patchesStrategicMerge:
+- patch.yml

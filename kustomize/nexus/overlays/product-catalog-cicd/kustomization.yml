@@ -3,5 +3,8 @@ kind: Kustomization
 
 namespace: product-catalog-cicd
 
-bases:
-- ../../bases
+resources:
+- github.com/gnunn1/product-catalog-tools//kustomize/nexus/bases/?ref=master
+
+patchesStrategicMerge:
+- patch.yml
