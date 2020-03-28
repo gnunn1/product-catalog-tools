@@ -5,7 +5,7 @@ bases:
 - ../../base
 - ../../../app/overlays/dev
 - ../../../app/overlays/test
-- ../../../cicd/overlays/registry
+- ../../../pipelines/overlays/registry
 
 generatorOptions:
   disableNameSuffixHash: true
