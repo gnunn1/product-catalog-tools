@@ -1,17 +1,32 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    app.kubernetes.io/part-of: product-catalog
+
+configMapGenerator:
+- name: server
+  files:
+    - configs/application.properties
+- name: client
+  files:
+    - configs/config.js
+- name: productdb-init
+  files:
+    - configs/90-init-database.sh
+    - configs/import.sql
+    - configs/schema.sql
+
 resources:
-  - db-sql-configmap.yml
   - db-pvc.yml
   - db-secret.yml
   - db-service.yml
   - db-deployment.yml
-  - server-configmap.yml
   - server-service.yml
   - server-route.yml
   - server-deployment.yml
-  - client-configmap.yml
   - client-service.yml
   - client-route.yml
   - client-deployment.yml

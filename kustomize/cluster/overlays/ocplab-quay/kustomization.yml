@@ -37,21 +37,5 @@ patchesJson6902:
     namespace: product-catalog-test
   path: patch-client-deployment.yml
 
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: server
-    namespace: product-catalog-dev
-  path: patch-server-deployment.yml
-
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: server
-    namespace: product-catalog-test
-  path: patch-server-deployment.yml
-
 patchesStrategicMerge:
 - patch.yml
