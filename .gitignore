@@ -1,1 +1,3 @@
 pull-secret.yml
+secret.json
+.dockerconfigjson
