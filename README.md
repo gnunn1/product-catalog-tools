@@ -1,3 +1,6 @@
+# Deprecated and will be removed shortly. Please see https://github.com/gnunn-gitops/product-catalog where development continues using ArgoCD for gitops
+
+
 ### Introduction
 
 This is an OpenShift demo of a product catalog using React for the front-end with Quarkus providing APIs as the back-end. The back-end was originally written in PHP and then ported to Quarkus.
